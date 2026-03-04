@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3월 매니저 교육 초청장</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 트렌디하고 모던한 산세리프 폰트 조합 -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Pretendard:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* 화사한 봄/VIP 컬러 팔레트 */
+            --bg-pearl: #FCFBF8;
+            --bg-blush: #FFF5F5;
+            --gold-light: #F9DF9F;
+            --gold-base: #D4AF37;
+            --rose-gold: #E2A9A0;
+            --text-dark: #1A1A1A; /* 완전한 블랙에 가까운 모던한 딥컬러 */
+            --text-gray: #666666;
+            --accent-red: #D84339;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            /* 기본 폰트를 Pretendard로 통일하여 세련미 강조 */
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f0ebe1;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            height: 100%;
+            letter-spacing: -0.02em; /* 트렌디한 자간 설정 */
+        }
+
+        .eng-font { font-family: 'Montserrat', sans-serif; letter-spacing: 0; }
+
+        /* 모바일 컨테이너 */
+        .mobile-wrap {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-pearl) 0%, #FDF7F2 50%, var(--bg-blush) 100%);
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* 화사한 텍스처 오버레이 */
+        .texture-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.03"/%3E%3C/svg%3E');
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* ----------------------------------
+           1. 인터랙티브 인트로 (화이트&골드 봉투)
+        ----------------------------------- */
+        #intro-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-pearl);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.5s ease, visibility 1.5s ease;
+        }
+
+        .envelope-container {
+            position: relative;
+            text-align: center;
+            cursor: pointer;
+            animation: float-gentle 4s ease-in-out infinite;
+        }
+
+        /* 로즈골드 왁스 실링 */
+        .wax-seal {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 30% 30%, #F9D4CE, #E2A9A0, #B87C73);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 15px 30px rgba(226, 169, 160, 0.4),
+                inset 0 0 15px rgba(0,0,0,0.1),
+                inset 0 4px 10px rgba(255,255,255,0.8);
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #FFF;
+        }
+
+        .wax-seal i {
+            font-size: 40px;
+            color: #FFF;
+            text-shadow: 0 2px 5px rgba(184, 124, 115, 0.5);
+        }
+
+        /* 우아한 물결 효과 */
+        .ripple {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            border: 2px solid var(--rose-gold);
+            animation: ripple-effect-bright 2.5s infinite cubic-bezier(0.2, 0.8, 0.4, 1);
+            z-index: 1;
+            opacity: 0.6;
+        }
+        .ripple:nth-child(2) { animation-delay: 1.2s; }
+
+        @keyframes ripple-effect-bright {
+            0% { width: 110px; height: 110px; opacity: 0.8; }
+            100% { width: 350px; height: 350px; opacity: 0; }
+        }
+
+        @keyframes float-gentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .tap-text {
+            margin-top: 50px;
+            color: var(--rose-gold);
+            font-weight: 800;
+            letter-spacing: 5px;
+            animation: pulse-soft 2s infinite;
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* 인트로 쪼개지는 애니메이션 */
+        .intro-door {
+            position: absolute;
+            top: 0; width: 50%; height: 100%;
+            background: var(--bg-pearl);
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 9998;
+        }
+        .intro-door.left { left: 0; border-right: 1px solid rgba(226, 169, 160, 0.3); }
+        .intro-door.right { right: 0; border-left: 1px solid rgba(226, 169, 160, 0.3); }
+
+        body.is-open #intro-screen { opacity: 0; visibility: hidden; }
+        body.is-open .intro-door.left { transform: translateX(-100%); }
+        body.is-open .intro-door.right { transform: translateX(100%); }
+
+        /* ----------------------------------
+           2. 메인 컨텐츠
+        ----------------------------------- */
+        #main-content {
+            position: relative;
+            z-index: 10;
+            padding: 50px 20px 150px;
+            opacity: 0;
+            transform: translateY(30px) scale(0.98);
+            transition: all 1.5s ease 0.6s;
+        }
+
+        body.is-open #main-content {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 눈부신 빛내림 효과 (상단) */
+        .light-rays {
+            position: absolute;
+            top: -20%; left: -50%;
+            width: 200%; height: 700px;
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.8) 0%, rgba(255,245,245,0.4) 40%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 텍스트 그라데이션 (로즈골드) */
+        .text-rosegold-gradient {
+            background: linear-gradient(to right, #C88D82, #E2A9A0, #C88D82);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 4s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* 메세지 카드 (화사한 종이 질감) */
+        .bright-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(226, 169, 160, 0.3);
+            border-radius: 24px;
+            padding: 40px 25px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(226, 169, 160, 0.15), inset 0 0 0 1px rgba(255,255,255,1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+
+        /* ----------------------------------
+           3. 하이엔드 VIP 티켓 디자인
+        ----------------------------------- */
+        .vip-ticket-wrap {
+            position: relative;
+            margin: 30px 0 50px;
+            filter: drop-shadow(0 25px 35px rgba(212, 175, 55, 0.25));
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            animation: ticket-float 6s ease-in-out infinite;
+        }
+
+        @keyframes ticket-float {
+            0%, 100% { transform: translateY(0) rotateX(2deg); }
+            50% { transform: translateY(-10px) rotateX(-2deg); }
+        }
+
+        .vip-ticket {
+            background: linear-gradient(135deg, #FFF, #FCFBF8);
+            border-radius: 20px;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 금박 홀로그램 효과 */
+        .vip-ticket::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(212, 175, 55, 0.15) 45%, rgba(255, 255, 255, 0.8) 50%, rgba(212, 175, 55, 0.15) 55%, transparent 60%);
+            transform: rotate(25deg);
+            animation: foil-shine 5s infinite;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        @keyframes foil-shine {
+            0% { transform: translateX(-100%) rotate(25deg); }
+            20%, 100% { transform: translateX(100%) rotate(25deg); }
+        }
+
+        /* 티켓 상단 (헤더) */
+        .ticket-header {
+            background: linear-gradient(90deg, #1A1A1A, #333333, #1A1A1A); /* 티켓 헤더를 블랙으로 시크하게 변경 */
+            color: #D4AF37;
+            padding: 18px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .ticket-header::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0; width: 100%; height: 10px;
+            background: radial-gradient(circle, transparent, transparent 50%, #FCFBF8 50%, #FCFBF8 100%);
+            background-size: 15px 15px;
+            background-repeat: repeat-x;
+        }
+
+        /* 티켓 절취선 */
+        .ticket-divider {
+            position: relative;
+            height: 2px;
+            background: repeating-linear-gradient(to right, transparent, transparent 5px, rgba(212, 175, 55, 0.3) 5px, rgba(212, 175, 55, 0.3) 10px);
+            margin: 0 20px;
+        }
+
+        .ticket-notch-left, .ticket-notch-right {
+            position: absolute;
+            top: 50%;
+            width: 30px; height: 30px;
+            background-color: var(--bg-pearl);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+        }
+        .ticket-notch-left { left: -15px; }
+        .ticket-notch-right { right: -15px; }
+
+        /* 바코드 */
+        .barcode {
+            width: 100%;
+            height: 40px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--text-dark),
+                var(--text-dark) 2px,
+                transparent 2px,
+                transparent 5px,
+                var(--text-dark) 5px,
+                var(--text-dark) 6px,
+                transparent 6px,
+                transparent 10px
+            );
+            opacity: 0.2;
+            margin-top: 15px;
+        }
+
+        /* ----------------------------------
+           4. 하단 고정 CTA 버튼
+        ----------------------------------- */
+        .fixed-bottom {
+            position: fixed;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(252, 251, 248, 1) 70%, rgba(252, 251, 248, 0));
+            z-index: 100;
+        }
+
+        .btn-vip {
+            display: block;
+            width: 100%;
+            padding: 18px 0;
+            background: linear-gradient(135deg, #D4AF37 0%, #E8C15A 50%, #D4AF37 100%);
+            border-radius: 16px;
+            color: #FFF;
+            font-weight: 800;
+            font-size: 1.15rem;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #F9DF9F;
+        }
+
+        .btn-vip:active { transform: translateY(2px); }
+
+        .urgent-badge {
+            position: absolute;
+            top: -12px; right: 20px;
+            background: var(--accent-red);
+            color: white;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            box-shadow: 0 4px 10px rgba(216, 67, 57, 0.4);
+            animation: pop 1s infinite alternate;
+            letter-spacing: -0.05em;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
+
+        /* 아이콘 그리드 애니메이션 */
+        .curriculum-item {
+            transition: all 0.3s ease;
+        }
+        .curriculum-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(226, 169, 160, 0.2);
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-wrap">
+    <div class="texture-overlay"></div>
+
+    <!-- 양쪽으로 열리는 화이트 도어 -->
+    <div class="intro-door left"></div>
+    <div class="intro-door right"></div>
+
+    <!-- 1. 인터랙티브 오프닝 (화사한 왁스실링) -->
+    <div id="intro-screen" onclick="unlockInvitation()">
+        <div class="envelope-container">
+            <div class="ripple"></div>
+            <div class="ripple"></div>
+            <!-- 로즈골드 왁스 실링 -->
+            <div class="wax-seal" id="seal">
+                <i class="fas fa-gem"></i>
+            </div>
+        </div>
+        <p class="tap-text eng-font text-sm mt-8">TOUCH TO OPEN</p>
+        <p class="text-xs text-gray-400 mt-3 font-semibold tracking-widest">하트빌리지 3월 매니저 교육</p>
+    </div>
+
+    <!-- 2. 메인 컨텐츠 -->
+    <div id="main-content">
+        <div class="light-rays"></div>
+
+        <!-- 헤더 -->
+        <div class="text-center mb-8 relative z-10">
+            <p class="eng-font text-rosegold-gradient text-[0.8rem] tracking-[4px] mb-3 font-bold">MARCH MANAGER CLASS</p>
+            <h1 class="text-3xl font-extrabold leading-tight text-dark mb-4 drop-shadow-sm tracking-tight">
+                하트빌리지 3월<br>매니저 교육 초청장
+            </h1>
+            <div class="w-12 h-0.5 mx-auto bg-gradient-to-r from-transparent via-[#E2A9A0] to-transparent"></div>
+        </div>
+
+        <!-- 메세지 본문 -->
+        <div class="bright-card text-[1rem] leading-[1.7] text-gray-700">
+            <p class="mb-5 text-dark font-bold text-lg">
+                하트빌리지를 가장 아름답게<br>빛내주고 계신 여러분!<br>
+                <strong class="text-rosegold-gradient text-xl">하트빌리지 사랑대표</strong>입니다. 🌷
+            </p>
+            
+            <p class="mb-5">
+                따뜻한 봄바람이 부는 3월, 우리 하트빌리지 식구들에게 가장 먼저 전해주고 싶은 가슴 뛰는 소식이 있어 이 특별한 초대장을 띄웁니다.
+            </p>
+
+            <div class="py-4 my-6 border-y border-[#E2A9A0]/30 text-center bg-[#FFF5F5]/60 rounded-xl">
+                <p class="text-[#C88D82] font-extrabold text-[1.1rem] mb-1 tracking-tight">"경험과 등급 상관없이, 누구든 대환영입니다."</p>
+            </div>
+
+            <p class="mb-7">
+                이 자리는 단순한 업무 교육이 아닙니다. 우리 하트빌리지 안에서 내 몸의 긍정적인 변화를 넘어, <span class="text-dark font-extrabold border-b-2 border-[#D4AF37]">진짜 나의 비전</span>을 찾기 위한 리더들의 시크릿 성장 파티입니다.
+            </p>
+
+            <!-- 🌟 새롭게 추가된 핵심 커리큘럼 섹션 -->
+            <div class="mt-8 mb-4 border-t border-dashed border-gray-300 pt-8">
+                <h3 class="text-center font-extrabold text-dark mb-5 text-[1.05rem]">
+                    이번 교육에서 완벽하게 마스터할<br>
+                    <span class="text-[#D84339]">4가지 핵심 무기</span>
+                </h3>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- 1. 건강과 아름다움 -->
+                    <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
+                        <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-sparkles text-[#D84339] text-lg"></i>
+                        </div>
+                        <p class="font-extrabold text-[0.9rem] text-dark">건강과 아름다움</p>
+                        <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">나만의 확실한 비포애프터</p>
+                    </div>
+                    
+                    <!-- 2. 제품 마스터 -->
+                    <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
+                        <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-box-open text-[#D84339] text-lg"></i>
+                        </div>
+                        <p class="font-extrabold text-[0.9rem] text-dark">제품 마스터</p>
+                        <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">대체 불가한 뷰티 전문성</p>
+                    </div>
+
+                    <!-- 3. 실전 마케팅 -->
+                    <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
+                        <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-bullhorn text-[#D84339] text-lg"></i>
+                        </div>
+                        <p class="font-extrabold text-[0.9rem] text-dark">실전 마케팅</p>
+                        <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">고객의 마음을 훔치는 법</p>
+                    </div>
+                    
+                    <!-- 4. 수익 창출 -->
+                    <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
+                        <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
+                            <i class="fas fa-coins text-[#D84339] text-lg"></i>
+                        </div>
+                        <p class="font-extrabold text-[0.9rem] text-dark">수익 창출 전략</p>
+                        <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">월 수익을 만드는 파이프라인</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-right mt-10">
+                <span class="text-[0.65rem] text-gray-400 block mb-1 eng-font font-bold tracking-widest">WITH ALL MY HEART,</span>
+                <span class="text-[#D4AF37] font-extrabold text-2xl">사랑대표 드림</span>
+            </div>
+        </div>
+
+        <!-- 3. 초호화 VIP 실물 티켓 컨셉 -->
+        <div class="vip-ticket-wrap">
+            <div class="vip-ticket">
+                <!-- 티켓 헤더 (시크한 블랙&골드) -->
+                <div class="ticket-header">
+                    <p class="eng-font text-[0.65rem] tracking-[4px] opacity-90 mb-1 font-bold">MARCH LEADERSHIP CLASS</p>
+                    <h2 class="text-[1.15rem] font-extrabold tracking-tight text-[#F9DF9F]">하트빌리지 VIP 초대권</h2>
+                </div>
+                
+                <!-- 티켓 바디 (강연자 정보) -->
+                <div class="p-6 bg-white relative z-10">
+                    <div class="flex items-center gap-4 mb-5">
+                        <div class="w-16 h-16 rounded-full border-2 border-[#D4AF37] p-1 shadow-md flex-shrink-0">
+                            <!-- 강연자 프로필 대체 -->
+                            <div class="w-full h-full bg-[#FCFBF8] rounded-full flex items-center justify-center text-[#D4AF37]">
+                                <i class="fas fa-user-tie text-2xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[0.7rem] text-[#D84339] font-extrabold mb-1">30만 독자의 삶을 바꾼 베스트셀러</p>
+                            <h3 class="text-xl font-extrabold text-dark tracking-tight">윤선현 작가 특별 초청</h3>
+                            <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">&lt;하루 15분 정리의 힘&gt; 저자 / 1호 정리 컨설턴트</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-[#FDF7F2] rounded-xl p-4 border border-[#E2A9A0]/20">
+                        <div class="flex mb-2 items-center">
+                            <div class="w-1/3 text-[0.7rem] text-gray-400 font-extrabold eng-font tracking-wider">DATE</div>
+                            <div class="w-2/3 text-[0.85rem] font-extrabold text-dark">3월 7일 (토) 10:00 ~ 17:00</div>
+                        </div>
+                        <div class="flex mb-2 items-center">
+                            <div class="w-1/3 text-[0.7rem] text-gray-400 font-extrabold eng-font tracking-wider">VENUE</div>
+                            <div class="w-2/3 text-[0.85rem] font-extrabold text-dark">청주 글로스터 호텔 3층</div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-1/3 text-[0.7rem] text-gray-400 font-extrabold eng-font tracking-wider">TICKET</div>
+                            <div class="w-2/3 text-[0.85rem] font-extrabold text-[#D84339]">기존 2만 / 신규 5만 (티타임 포함)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 절취선 영역 -->
+                <div class="relative bg-white pb-2">
+                    <div class="ticket-notch-left"></div>
+                    <div class="ticket-notch-right"></div>
+                    <div class="ticket-divider"></div>
+                </div>
+
+                <!-- 티켓 바텀 (바코드) -->
+                <div class="bg-white p-5 pt-2 text-center relative z-10 rounded-b-20">
+                    <p class="text-[0.65rem] text-gray-400 font-bold tracking-widest eng-font">ADMIT ONE VIP GUEST</p>
+                    <div class="barcode"></div>
+                    <p class="text-[0.7rem] text-gray-300 mt-2 eng-font font-medium tracking-widest">0307-HEART-VILLAGE-VIP</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 4. 고정 하단 CTA 버튼 (오늘 마감 강조) -->
+    <div class="fixed-bottom">
+        <div class="relative">
+            <div class="urgent-badge">3/4(수) 오늘 최종 마감!</div>
+            <a href="javascript:void(0)" onclick="alert('카카오톡 신청 페이지로 이동합니다. 오늘 마감입니다!')" class="btn-vip flex items-center justify-center gap-2">
+                <i class="fas fa-ticket-alt"></i> 오늘 마감! VIP 좌석 확보하기
+            </a>
+        </div>
+        <p class="text-center text-[0.75rem] text-gray-600 mt-3 font-extrabold tracking-tight">
+            <i class="fas fa-clock text-[#D84339]"></i> 3/4(수) 오늘까지만 신청 가능합니다. 빠른 신청 부탁드립니다!
+        </p>
+    </div>
+
+</div>
+
+<script>
+    // 비밀의 문 열기 인터랙션
+    function unlockInvitation() {
+        const seal = document.getElementById('seal');
+        
+        // 도장 눌리는 효과
+        seal.style.transform = 'scale(0.85)';
+        seal.style.boxShadow = '0 5px 10px rgba(226, 169, 160, 0.4)';
+        
+        setTimeout(() => {
+            // 문 열리는 클래스 추가
+            document.body.classList.add('is-open');
+            
+            // 약간의 딜레이 후 진동 효과 (모바일 지원 시)
+            if(navigator.vibrate) {
+                navigator.vibrate([30, 50, 30]); 
+            }
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
