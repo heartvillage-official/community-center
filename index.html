@@ -59,119 +59,21 @@
         }
 
         /* ----------------------------------
-           1. 인터랙티브 인트로 (화이트&골드 봉투)
-        ----------------------------------- */
-        #intro-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-pearl);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.5s ease, visibility 1.5s ease;
-        }
-
-        .envelope-container {
-            position: relative;
-            text-align: center;
-            cursor: pointer;
-            animation: float-gentle 4s ease-in-out infinite;
-        }
-
-        /* 로즈골드 왁스 실링 */
-        .wax-seal {
-            width: 110px;
-            height: 110px;
-            background: radial-gradient(circle at 30% 30%, #F9D4CE, #E2A9A0, #B87C73);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 
-                0 15px 30px rgba(226, 169, 160, 0.4),
-                inset 0 0 15px rgba(0,0,0,0.1),
-                inset 0 4px 10px rgba(255,255,255,0.8);
-            position: relative;
-            z-index: 2;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid #FFF;
-        }
-
-        .wax-seal i {
-            font-size: 40px;
-            color: #FFF;
-            text-shadow: 0 2px 5px rgba(184, 124, 115, 0.5);
-        }
-
-        /* 우아한 물결 효과 */
-        .ripple {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 110px; height: 110px;
-            border-radius: 50%;
-            border: 2px solid var(--rose-gold);
-            animation: ripple-effect-bright 2.5s infinite cubic-bezier(0.2, 0.8, 0.4, 1);
-            z-index: 1;
-            opacity: 0.6;
-        }
-        .ripple:nth-child(2) { animation-delay: 1.2s; }
-
-        @keyframes ripple-effect-bright {
-            0% { width: 110px; height: 110px; opacity: 0.8; }
-            100% { width: 350px; height: 350px; opacity: 0; }
-        }
-
-        @keyframes float-gentle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .tap-text {
-            margin-top: 50px;
-            color: var(--rose-gold);
-            font-weight: 800;
-            letter-spacing: 5px;
-            animation: pulse-soft 2s infinite;
-        }
-
-        @keyframes pulse-soft {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* 인트로 쪼개지는 애니메이션 */
-        .intro-door {
-            position: absolute;
-            top: 0; width: 50%; height: 100%;
-            background: var(--bg-pearl);
-            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
-            z-index: 9998;
-        }
-        .intro-door.left { left: 0; border-right: 1px solid rgba(226, 169, 160, 0.3); }
-        .intro-door.right { right: 0; border-left: 1px solid rgba(226, 169, 160, 0.3); }
-
-        body.is-open #intro-screen { opacity: 0; visibility: hidden; }
-        body.is-open .intro-door.left { transform: translateX(-100%); }
-        body.is-open .intro-door.right { transform: translateX(100%); }
-
-        /* ----------------------------------
-           2. 메인 컨텐츠
+           1. 메인 컨텐츠 (자동 페이드인)
         ----------------------------------- */
         #main-content {
             position: relative;
             z-index: 10;
-            padding: 50px 20px 150px;
+            padding: 40px 20px 150px;
+            /* 접속하자마자 스르륵 나타나는 고급스러운 애니메이션 */
+            animation: smoothFadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
-            transform: translateY(30px) scale(0.98);
-            transition: all 1.5s ease 0.6s;
+            transform: translateY(20px);
         }
 
-        body.is-open #main-content {
-            opacity: 1;
-            transform: translateY(0) scale(1);
+        @keyframes smoothFadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         /* 눈부신 빛내림 효과 (상단) */
@@ -179,7 +81,7 @@
             position: absolute;
             top: -20%; left: -50%;
             width: 200%; height: 700px;
-            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.8) 0%, rgba(255,245,245,0.4) 40%, transparent 70%);
+            background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.9) 0%, rgba(255,245,245,0.5) 40%, transparent 70%);
             pointer-events: none;
             z-index: 0;
         }
@@ -202,7 +104,7 @@
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(226, 169, 160, 0.3);
             border-radius: 24px;
-            padding: 40px 25px;
+            padding: 35px 25px;
             position: relative;
             box-shadow: 0 20px 40px rgba(226, 169, 160, 0.15), inset 0 0 0 1px rgba(255,255,255,1);
             backdrop-filter: blur(10px);
@@ -210,20 +112,20 @@
         }
 
         /* ----------------------------------
-           3. 하이엔드 VIP 티켓 디자인
+           2. 하이엔드 VIP 티켓 디자인
         ----------------------------------- */
         .vip-ticket-wrap {
             position: relative;
             margin: 30px 0 50px;
-            filter: drop-shadow(0 25px 35px rgba(212, 175, 55, 0.25));
+            filter: drop-shadow(0 20px 30px rgba(212, 175, 55, 0.2));
             transform-style: preserve-3d;
             perspective: 1000px;
             animation: ticket-float 6s ease-in-out infinite;
         }
 
         @keyframes ticket-float {
-            0%, 100% { transform: translateY(0) rotateX(2deg); }
-            50% { transform: translateY(-10px) rotateX(-2deg); }
+            0%, 100% { transform: translateY(0) rotateX(1deg); }
+            50% { transform: translateY(-8px) rotateX(-1deg); }
         }
 
         .vip-ticket {
@@ -255,7 +157,7 @@
 
         /* 티켓 상단 (헤더) */
         .ticket-header {
-            background: linear-gradient(90deg, #1A1A1A, #333333, #1A1A1A); /* 티켓 헤더를 블랙으로 시크하게 변경 */
+            background: linear-gradient(90deg, #1A1A1A, #333333, #1A1A1A);
             color: #D4AF37;
             padding: 18px 20px;
             text-align: center;
@@ -312,7 +214,7 @@
         }
 
         /* ----------------------------------
-           4. 하단 고정 CTA 버튼
+           3. 하단 고정 CTA 버튼
         ----------------------------------- */
         .fixed-bottom {
             position: fixed;
@@ -379,25 +281,7 @@
 <div class="mobile-wrap">
     <div class="texture-overlay"></div>
 
-    <!-- 양쪽으로 열리는 화이트 도어 -->
-    <div class="intro-door left"></div>
-    <div class="intro-door right"></div>
-
-    <!-- 1. 인터랙티브 오프닝 (화사한 왁스실링) -->
-    <div id="intro-screen" onclick="unlockInvitation()">
-        <div class="envelope-container">
-            <div class="ripple"></div>
-            <div class="ripple"></div>
-            <!-- 로즈골드 왁스 실링 -->
-            <div class="wax-seal" id="seal">
-                <i class="fas fa-gem"></i>
-            </div>
-        </div>
-        <p class="tap-text eng-font text-sm mt-8">TOUCH TO OPEN</p>
-        <p class="text-xs text-gray-400 mt-3 font-semibold tracking-widest">하트빌리지 3월 매니저 교육</p>
-    </div>
-
-    <!-- 2. 메인 컨텐츠 -->
+    <!-- 메인 컨텐츠 (접속 즉시 표시) -->
     <div id="main-content">
         <div class="light-rays"></div>
 
@@ -429,7 +313,7 @@
                 이 자리는 단순한 업무 교육이 아닙니다. 우리 하트빌리지 안에서 내 몸의 긍정적인 변화를 넘어, <span class="text-dark font-extrabold border-b-2 border-[#D4AF37]">진짜 나의 비전</span>을 찾기 위한 리더들의 시크릿 성장 파티입니다.
             </p>
 
-            <!-- 🌟 새롭게 추가된 핵심 커리큘럼 섹션 -->
+            <!-- 핵심 커리큘럼 섹션 -->
             <div class="mt-8 mb-4 border-t border-dashed border-gray-300 pt-8">
                 <h3 class="text-center font-extrabold text-dark mb-5 text-[1.05rem]">
                     이번 교육에서 완벽하게 마스터할<br>
@@ -437,7 +321,6 @@
                 </h3>
                 
                 <div class="grid grid-cols-2 gap-3">
-                    <!-- 1. 건강과 아름다움 -->
                     <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
                         <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
                             <i class="fas fa-sparkles text-[#D84339] text-lg"></i>
@@ -446,7 +329,6 @@
                         <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">나만의 확실한 비포애프터</p>
                     </div>
                     
-                    <!-- 2. 제품 마스터 -->
                     <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
                         <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
                             <i class="fas fa-box-open text-[#D84339] text-lg"></i>
@@ -455,7 +337,6 @@
                         <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">대체 불가한 뷰티 전문성</p>
                     </div>
 
-                    <!-- 3. 실전 마케팅 -->
                     <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
                         <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
                             <i class="fas fa-bullhorn text-[#D84339] text-lg"></i>
@@ -464,7 +345,6 @@
                         <p class="text-[0.7rem] text-gray-500 mt-1 font-medium">고객의 마음을 훔치는 법</p>
                     </div>
                     
-                    <!-- 4. 수익 창출 -->
                     <div class="curriculum-item bg-white/70 p-4 rounded-2xl border border-[#E2A9A0]/40 text-center">
                         <div class="w-10 h-10 mx-auto bg-[#FFF5F5] rounded-full flex items-center justify-center mb-2">
                             <i class="fas fa-coins text-[#D84339] text-lg"></i>
@@ -481,7 +361,7 @@
             </div>
         </div>
 
-        <!-- 3. 초호화 VIP 실물 티켓 컨셉 -->
+        <!-- 초호화 VIP 실물 티켓 컨셉 -->
         <div class="vip-ticket-wrap">
             <div class="vip-ticket">
                 <!-- 티켓 헤더 (시크한 블랙&골드) -->
@@ -490,11 +370,10 @@
                     <h2 class="text-[1.15rem] font-extrabold tracking-tight text-[#F9DF9F]">하트빌리지 VIP 초대권</h2>
                 </div>
                 
-                <!-- 티켓 바디 (강연자 정보) -->
+                <!-- 티켓 바디 -->
                 <div class="p-6 bg-white relative z-10">
                     <div class="flex items-center gap-4 mb-5">
                         <div class="w-16 h-16 rounded-full border-2 border-[#D4AF37] p-1 shadow-md flex-shrink-0">
-                            <!-- 강연자 프로필 대체 -->
                             <div class="w-full h-full bg-[#FCFBF8] rounded-full flex items-center justify-center text-[#D4AF37]">
                                 <i class="fas fa-user-tie text-2xl"></i>
                             </div>
@@ -529,7 +408,7 @@
                     <div class="ticket-divider"></div>
                 </div>
 
-                <!-- 티켓 바텀 (바코드) -->
+                <!-- 티켓 바텀 -->
                 <div class="bg-white p-5 pt-2 text-center relative z-10 rounded-b-20">
                     <p class="text-[0.65rem] text-gray-400 font-bold tracking-widest eng-font">ADMIT ONE VIP GUEST</p>
                     <div class="barcode"></div>
@@ -549,32 +428,11 @@
             </a>
         </div>
         <p class="text-center text-[0.75rem] text-gray-600 mt-3 font-extrabold tracking-tight">
-            <i class="fas fa-clock text-[#D84339]"></i> 3/4(수) 오늘까지만 신청 가능합니다. 빠른 신청 부탁드립니다!
+            <i class="fas fa-clock text-[#D84339]"></i> 3/4(수) 오늘까지만 신청 가능합니다.
         </p>
     </div>
 
 </div>
 
-<script>
-    // 비밀의 문 열기 인터랙션
-    function unlockInvitation() {
-        const seal = document.getElementById('seal');
-        
-        // 도장 눌리는 효과
-        seal.style.transform = 'scale(0.85)';
-        seal.style.boxShadow = '0 5px 10px rgba(226, 169, 160, 0.4)';
-        
-        setTimeout(() => {
-            // 문 열리는 클래스 추가
-            document.body.classList.add('is-open');
-            
-            // 약간의 딜레이 후 진동 효과 (모바일 지원 시)
-            if(navigator.vibrate) {
-                navigator.vibrate([30, 50, 30]); 
-            }
-        }, 300);
-    }
-</script>
-
 </body>
-</html>  
+</html>
