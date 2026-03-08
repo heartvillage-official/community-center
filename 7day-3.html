@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPRING FESTIVAL: BOARDING PASS</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@300;400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Three.js for 3D Environment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- GSAP & Canvas Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        spring: {
+                            bg: '#FFF5F6',
+                            white: '#FFFFFF',
+                            text: '#4A3B3C',
+                            pink: '#FF8E9E',
+                            rose: '#E8B2C1',
+                            deep: '#B06573',
+                            gold: '#C5A059',
+                            dark: '#2D2427',
+                        }
+                    },
+                    fontFamily: {
+                        pretendard: ['"Pretendard Variable"', 'sans-serif'],
+                        serifKR: ['"Noto Serif KR"', 'serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif'],
+                        mono: ['"Space Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body, html {
+            background-color: #FFF5F6;
+            color: #4A3B3C;
+            font-family: 'Pretendard Variable', sans-serif;
+            overflow-x: hidden;
+            margin: 0; padding: 0;
+            letter-spacing: -0.02em;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 3D Canvas Background */
+        #intro-3d-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 0;
+            pointer-events: none; 
+            background: linear-gradient(180deg, #FFF5F6 0%, #FFE4E8 100%);
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+        }
+
+        /* -------------------------------------
+           Boarding Pass Layout (The Star)
+        -------------------------------------- */
+        .boarding-pass-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .boarding-pass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(176, 101, 115, 0.15), 0 0 0 1px rgba(255, 142, 158, 0.3);
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        @media (min-width: 1024px) {
+            .boarding-pass { flex-direction: row; border-radius: 30px; }
+        }
+
+        /* The Main Ticket Body */
+        .bp-main {
+            padding: 40px;
+            flex: 1;
+            position: relative;
+        }
+        @media (min-width: 1024px) {
+            .bp-main { padding: 50px 60px; }
+        }
+
+        /* The Stub (Tear-off Part) */
+        .bp-stub {
+            padding: 40px;
+            background: linear-gradient(135deg, #FF8E9E 0%, #E8B2C1 100%);
+            color: white;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        @media (min-width: 1024px) {
+            .bp-stub { width: 350px; padding: 50px 40px; }
+        }
+
+        /* The Perforated Divider & Cutouts */
+        .bp-divider {
+            position: relative;
+            border-top: 3px dashed rgba(255, 142, 158, 0.5);
+        }
+        @media (min-width: 1024px) {
+            .bp-divider {
+                border-top: none;
+                border-left: 3px dashed rgba(255, 142, 158, 0.5);
+            }
+        }
+
+        /* Circular Cutouts to make it look like a real ticket */
+        .bp-divider::before, .bp-divider::after {
+            content: '';
+            position: absolute;
+            width: 40px; height: 40px;
+            background: #FFF5F6; /* Matches the body background */
+            border-radius: 50%;
+            z-index: 10;
+            box-shadow: inset 0 0 10px rgba(176, 101, 115, 0.1);
+        }
+
+        /* Mobile Cutout positions */
+        @media (max-width: 1023px) {
+            .bp-divider::before { top: -20px; left: -40px; }
+            .bp-divider::after { top: -20px; right: -40px; }
+        }
+        /* Desktop Cutout positions */
+        @media (min-width: 1024px) {
+            .bp-divider::before { top: -60px; left: -20px; }
+            .bp-divider::after { bottom: -60px; left: -20px; }
+        }
+
+        /* -------------------------------------
+           Ticket Typography & Elements
+        -------------------------------------- */
+        .ticket-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: #B06573;
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .stub-label { color: rgba(255,255,255,0.7); }
+
+        .ticket-value {
+            font-family: 'Pretendard Variable', sans-serif;
+            font-size: 18px;
+            color: #2D2427;
+            font-weight: 700;
+        }
+        .stub-value { color: white; }
+
+        .barcode {
+            height: 40px;
+            width: 100%;
+            background-image: repeating-linear-gradient(
+                to right,
+                #2D2427, #2D2427 3px, transparent 3px, transparent 6px,
+                #2D2427 6px, #2D2427 8px, transparent 8px, transparent 12px
+            );
+            opacity: 0.2;
+        }
+        .stub-barcode { background-image: repeating-linear-gradient(to right, white, white 3px, transparent 3px, transparent 6px, white 6px, white 8px, transparent 8px, transparent 12px); opacity: 0.5; }
+
+        /* Approval Stamp Animation */
+        .stamp-approved {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(5) rotate(-15deg);
+            opacity: 0;
+            border: 6px solid #D41C54;
+            color: #D41C54;
+            font-family: 'Space Mono', monospace;
+            font-size: 40px;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            padding: 10px 20px;
+            border-radius: 10px;
+            pointer-events: none;
+            z-index: 100;
+            text-shadow: 0 0 10px rgba(212,28,84,0.3);
+            box-shadow: 0 0 20px rgba(212,28,84,0.2), inset 0 0 20px rgba(212,28,84,0.2);
+        }
+
+        /* -------------------------------------
+           Live Manifest Ticker
+        -------------------------------------- */
+        .manifest-container {
+            height: 140px;
+            overflow: hidden;
+            position: relative;
+            background: #FFF5F6;
+            border-radius: 12px;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 142, 158, 0.2);
+            mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+        }
+
+        .manifest-list {
+            list-style: none; padding: 0; margin: 0;
+        }
+
+        .manifest-list li {
+            padding: 8px 10px;
+            border-bottom: 1px dashed rgba(255, 142, 158, 0.3);
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+            color: #4A3B3C;
+            display: flex;
+            justify-content: space-between;
+        }
+        .manifest-list li:last-child { border-bottom: none; }
+        
+        .manifest-new {
+            color: #D41C54;
+            font-weight: bold;
+            background: rgba(255, 142, 158, 0.1);
+            border-radius: 4px;
+        }
+
+        /* -------------------------------------
+           Input & Button
+        -------------------------------------- */
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            font-size: 18px;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+            text-align: center;
+            font-family: 'Pretendard Variable', sans-serif;
+            font-weight: 600;
+        }
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        .input-field::placeholder { color: rgba(255, 255, 255, 0.6); font-weight: 400; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: white;
+            color: #B06573;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            letter-spacing: 0.05em;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin-top: 16px;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2); }
+        .submit-btn:active { transform: scale(0.98); }
+
+        /* -------------------------------------
+           Premium Ticket Modal (Apple Wallet Style)
+        -------------------------------------- */
+        #success-modal {
+            position: fixed; inset: 0;
+            background: rgba(45, 36, 39, 0.8);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease;
+            padding: 20px;
+        }
+        #success-modal.active { opacity: 1; pointer-events: auto; }
+
+        .wallet-pass {
+            width: 100%; max-width: 360px;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        #success-modal.active .wallet-pass { transform: translateY(0); opacity: 1; }
+
+        .wallet-header {
+            background: linear-gradient(135deg, #FF8E9E 0%, #E8B2C1 100%);
+            padding: 30px 20px;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Inner ticket cutout */
+        .wallet-body {
+            padding: 30px 20px;
+            background: #fff;
+            position: relative;
+        }
+        .wallet-divider {
+            height: 0;
+            border-top: 2px dashed #eee;
+            margin: 20px 0;
+            position: relative;
+        }
+        .wallet-divider::before, .wallet-divider::after {
+            content: ''; position: absolute;
+            top: -10px; width: 20px; height: 20px;
+            background: rgba(45, 36, 39, 0.8); /* Match modal bg */
+            border-radius: 50%;
+        }
+        .wallet-divider::before { left: -30px; }
+        .wallet-divider::after { right: -30px; }
+
+    </style>
+</head>
+<body>
+
+    <!-- 3D Petals Background -->
+    <div id="intro-3d-canvas"></div>
+
+    <div class="content-wrapper">
+        
+        <!-- Header -->
+        <header class="pt-12 md:pt-16 pb-6 px-6 text-center gs-fade-up">
+            <h1 class="font-cinzel text-xl md:text-2xl font-bold tracking-[0.4em] text-spring-dark mb-2">HEART VILLAGE</h1>
+            <p class="font-serifKR text-sm md:text-base text-spring-deep tracking-widest">7 DAY CHALLENGE : SPRING FESTIVAL</p>
+        </header>
+
+        <!-- Main Boarding Pass Area -->
+        <main class="boarding-pass-wrapper gs-fade-up">
+            
+            <div class="boarding-pass">
+                
+                <!-- LEFT/TOP: Flight Info & Manifest -->
+                <div class="bp-main">
+                    
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <p class="font-montserrat text-[10px] font-bold tracking-[0.3em] text-spring-pink bg-spring-pink/10 px-3 py-1 rounded-full inline-block mb-3 border border-spring-pink/20">BOARDING PASS</p>
+                            <h2 class="font-serifKR text-4xl md:text-5xl text-spring-dark font-light leading-tight">
+                                내 몸의 봄을 찾는<br><strong class="font-bold">퍼스트 클래스</strong>
+                            </h2>
+                        </div>
+                        <i data-lucide="plane-takeoff" class="w-10 h-10 md:w-12 md:h-12 text-spring-rose opacity-40"></i>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8 border-t border-b border-spring-pink/20 py-6">
+                        <div>
+                            <div class="ticket-label">FLIGHT NO</div>
+                            <div class="ticket-value font-mono">HV-0309</div>
+                        </div>
+                        <div>
+                            <div class="ticket-label">DATE</div>
+                            <div class="ticket-value">3.9 - 3.14 (6일의 비행)</div>
+                        </div>
+                        <div>
+                            <div class="ticket-label">BOARDING TIME</div>
+                            <div class="ticket-value">06:00 ~ 07:00 AM</div>
+                        </div>
+                        <div>
+                            <div class="ticket-label">GATE</div>
+                            <div class="ticket-value">ZOOM LIVE</div>
+                        </div>
+                        <div class="col-span-2 md:col-span-4">
+                            <div class="ticket-label">PILOT (SPEAKER)</div>
+                            <div class="ticket-value">최송철 원장님 (자담인 힐링연수원)</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Flight Manifest -->
+                    <div>
+                        <div class="flex justify-between items-end mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="pulse-dot"></span>
+                                <span class="ticket-label mb-0" style="color: #4A3B3C;">LIVE PASSENGER MANIFEST</span>
+                            </div>
+                            <div class="font-mono text-xs text-spring-deep font-bold">
+                                TOTAL <span id="counter-val" class="text-lg">241</span>
+                            </div>
+                        </div>
+                        
+                        <div class="manifest-container">
+                            <ul class="manifest-list" id="ticker-list">
+                                <!-- JS injected list -->
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div id="stamp" class="stamp-approved">APPROVED</div>
+                </div>
+
+                <!-- RIGHT/BOTTOM: The Tear-off Stub (Form) -->
+                <div class="bp-divider"></div>
+                
+                <div class="bp-stub">
+                    <div class="text-center mb-6">
+                        <i data-lucide="crown" class="w-8 h-8 mx-auto text-white/80 mb-2"></i>
+                        <p class="font-montserrat tracking-[0.2em] text-[10px] font-bold text-white/80">CLASS: VVIP</p>
+                        <h3 class="font-serifKR text-2xl font-bold text-white mt-1">티켓 발권</h3>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="ticket-label stub-label ml-2">PASSENGER NAME</div>
+                        <input type="text" id="nameInput" class="input-field" placeholder="여왕님 성함 입력" autocomplete="off" maxlength="10">
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="ticket-label stub-label">DESTINATION</div>
+                        <div class="ticket-value stub-value">SPRING RENAISSANCE</div>
+                    </div>
+
+                    <div class="stub-barcode barcode mt-2"></div>
+
+                    <button id="issueBtn" class="submit-btn group">
+                        탑승 수속하기 <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+            </div>
+            
+        </main>
+
+        <footer class="py-6 text-center text-spring-deep/60 text-xs font-mono tracking-widest mt-auto">
+            <p>H.V. ATELIER &copy; 2026 ETERNAL SPRING</p>
+        </footer>
+
+    </div>
+
+    <!-- ==========================================
+         SUCCESS MODAL (Apple Wallet Style Ticket)
+    =========================================== -->
+    <div id="success-modal">
+        
+        <p class="font-serifKR text-white text-xl mb-4 opacity-80" id="modal-text">티켓이 발급되었습니다. 캡처해두세요!</p>
+
+        <div class="wallet-pass">
+            <div class="wallet-header">
+                <div class="flex justify-between items-center mb-6">
+                    <i data-lucide="flower" class="w-6 h-6"></i>
+                    <span class="font-montserrat text-[10px] tracking-widest font-bold border border-white/40 px-2 py-1 rounded">VVIP PASS</span>
+                </div>
+                <p class="font-serifKR text-3xl font-light mb-1">스프링 페스티벌</p>
+                <p class="font-pretendard text-sm font-medium opacity-90">7데이 챌린지 모닝 특강</p>
+            </div>
+            
+            <div class="wallet-body">
+                <div class="mb-6">
+                    <p class="ticket-label">PASSENGER</p>
+                    <p class="font-serifKR text-2xl font-bold text-spring-dark">
+                        <span id="ticket-name-display" class="text-spring-pink">ㅇㅇㅇ</span> 여왕님
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="ticket-label">FLIGHT</p>
+                        <p class="font-mono font-bold text-spring-dark">HV-0309</p>
+                    </div>
+                    <div>
+                        <p class="ticket-label">GATE</p>
+                        <p class="font-mono font-bold text-spring-dark">ZOOM</p>
+                    </div>
+                    <div>
+                        <p class="ticket-label">DATE</p>
+                        <p class="font-mono font-bold text-spring-dark">MAR 09</p>
+                    </div>
+                    <div>
+                        <p class="ticket-label">TIME</p>
+                        <p class="font-mono font-bold text-spring-dark">06:00 AM</p>
+                    </div>
+                </div>
+
+                <div class="wallet-divider"></div>
+
+                <div class="text-center">
+                    <div class="barcode w-full h-12 opacity-60 mb-2"></div>
+                    <p class="font-mono text-[10px] tracking-[0.2em] text-gray-500" id="ticket-serial">NO. 20260309</p>
+                </div>
+            </div>
+        </div>
+
+        <button id="closeModalBtn" class="mt-8 px-8 py-3 bg-white/10 text-white rounded-full font-pretendard text-sm hover:bg-white/20 transition-colors">
+            닫기
+        </button>
+
+    </div>
+
+    <!-- ==========================================
+         SCRIPTS
+    =========================================== -->
+    <script>
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        /* -----------------------------------------------------------
+           1. THREE.JS 3D Falling Petals Background
+        ----------------------------------------------------------- */
+        const canvasContainer = document.getElementById('intro-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 10;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        canvasContainer.appendChild(renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        
+        const petals = [];
+        const petalGeo = new THREE.SphereGeometry(0.15, 5, 5); 
+        petalGeo.scale(1, 0.1, 1.5); 
+        const colors = [0xFF8E9E, 0xE8B2C1, 0xFFFFFF];
+
+        const isMobile = window.innerWidth < 768;
+        const petalCount = isMobile ? 50 : 100;
+
+        for(let i=0; i<petalCount; i++) {
+            const mat = new THREE.MeshLambertMaterial({ 
+                color: colors[Math.floor(Math.random() * colors.length)],
+                transparent: true,
+                opacity: Math.random() * 0.4 + 0.4,
+                side: THREE.DoubleSide
+            });
+            const mesh = new THREE.Mesh(petalGeo, mat);
+            
+            mesh.position.set(
+                (Math.random() - 0.5) * 20, 
+                Math.random() * 20 - 5, 
+                (Math.random() - 0.5) * 10
+            );
+            mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, Math.random()*Math.PI);
+            mesh.userData = {
+                rx: Math.random() * 0.02 - 0.01,
+                ry: Math.random() * 0.02 - 0.01,
+                vy: -Math.random() * 0.02 - 0.01, 
+                vx: Math.random() * 0.01 - 0.005   
+            };
+            scene.add(mesh);
+            petals.push(mesh);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            petals.forEach(p => {
+                p.rotation.x += p.userData.rx;
+                p.rotation.y += p.userData.ry;
+                p.position.y += p.userData.vy;
+                p.position.x += p.userData.vx;
+                if(p.position.y < -10) {
+                    p.position.y = 10;
+                    p.position.x = (Math.random() - 0.5) * 20;
+                }
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        /* -----------------------------------------------------------
+           2. Scroll Animations & GSAP
+        ----------------------------------------------------------- */
+        gsap.from('.gs-fade-up', {
+            y: 40, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
+        });
+
+        /* -----------------------------------------------------------
+           3. Live Manifest & Ticketing Logic
+        ----------------------------------------------------------- */
+        const tickerList = document.getElementById('ticker-list');
+        const counterVal = document.getElementById('counter-val');
+        let currentCount = 241;
+        let currentOrder = currentCount; 
+
+        const initialNames = ["이*진", "박*희", "정*연", "김*영", "최*미", "강*주"];
+        
+        function addTickerItem(name, isNew = false) {
+            const li = document.createElement('li');
+            
+            let displayName = name;
+            if(isNew) {
+                if(name.length === 2) displayName = name[0] + "*";
+                else if(name.length > 2) displayName = name[0] + "*" + name.substring(2);
+            }
+
+            li.innerHTML = `
+                <span><span class="text-spring-pink mr-3">NO.${currentOrder}</span> ${displayName}</span>
+                <span class="text-xs">BOARDED ✓</span>
+            `;
+            
+            if(isNew) {
+                li.classList.add('manifest-new');
+                tickerList.prepend(li);
+                gsap.from(li, { height: 0, opacity: 0, y: -20, duration: 0.5, ease: "back.out(1.5)"});
+            } else {
+                tickerList.appendChild(li);
+            }
+            currentOrder--;
+        }
+
+        // Initialize List
+        initialNames.forEach(name => addTickerItem(name));
+
+        // Form Submit Logic
+        const issueBtn = document.getElementById('issueBtn');
+        const nameInput = document.getElementById('nameInput');
+        const stamp = document.getElementById('stamp');
+        const modal = document.getElementById('success-modal');
+        const ticketNameDisplay = document.getElementById('ticket-name-display');
+        const ticketSerial = document.getElementById('ticket-serial');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        issueBtn.addEventListener('click', () => {
+            const val = nameInput.value.trim();
+            if(val.length < 2) {
+                alert("여왕님의 탑승자명을 정확히 입력해주세요. ✈️");
+                return;
+            }
+
+            issueBtn.style.pointerEvents = 'none';
+            issueBtn.innerHTML = '<i class="lucide-loader animate-spin"></i> 수속 중...';
+
+            // 1. Stamp Animation on Main Ticket
+            gsap.to(stamp, {
+                scale: 1, opacity: 1, rotation: -15, 
+                duration: 0.4, ease: "back.out(2)",
+                onComplete: () => {
+                    
+                    // 2. Update Counter & Manifest
+                    currentCount++;
+                    currentOrder = currentCount; 
+                    
+                    gsap.to(counterVal, {
+                        innerHTML: currentCount, duration: 0.5, snap: { innerHTML: 1 },
+                        onUpdate: function() { counterVal.innerHTML = Math.round(counterVal.innerHTML); }
+                    });
+                    
+                    addTickerItem(val, true);
+
+                    // 3. Show Wallet Modal
+                    setTimeout(() => {
+                        ticketNameDisplay.textContent = val;
+                        ticketSerial.textContent = `NO. 20260309${currentCount}`;
+                        
+                        modal.classList.add('active');
+                        
+                        // Fire Confetti
+                        confetti({
+                            particleCount: 150, spread: 80, origin: { y: 0.4 },
+                            colors: ['#FF8E9E', '#E8B2C1', '#FFFFFF', '#C5A059']
+                        });
+
+                        // Reset form
+                        nameInput.value = '';
+                        issueBtn.style.pointerEvents = 'auto';
+                        issueBtn.innerHTML = '탑승 수속하기 <i data-lucide="arrow-right" class="w-5 h-5"></i>';
+                        lucide.createIcons();
+                        gsap.to(stamp, { opacity: 0, scale: 5, duration: 0.1 }); // hide stamp for next user
+                    }, 800);
+                }
+            });
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+
+    </script>
+</body>
+</html>
